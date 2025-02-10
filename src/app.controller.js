@@ -15,7 +15,7 @@ export const bootstrap = async (app, express) => {
     app.use((req, res, next) => {
         const whiteList = ['http://localhost:5500', 'http://localhost:4200']
         const origin = req.headers.origin;
-        if (!whiteList.includes(origin)) {
+        if (whiteList.includes(origin)) {
             return next(new Error("Invalid origin from cors", { cause: 501 }))
         }
 
