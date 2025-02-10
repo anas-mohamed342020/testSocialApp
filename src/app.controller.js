@@ -11,8 +11,22 @@ import cors from 'cors'
 
 
 export const bootstrap = async (app, express) => {
+
+    app.use((req, res, next) => {
+        const whiteList = ['http://localhost:5500', 'http://localhost:4200']
+        const origin = req.headers.origin;
+        if (!whiteList.includes(origin)) {
+            return next(new Error("Invalid origin from cors", { cause: 501 }))
+        }
+
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', '*');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+        res.setHeader('Access-Control-private-network', true)
+        return next()
+    })
+
     app.use(express.json())
-    app.use(cors())
     DBConnection()
     //service file
     const sayHello = (req, res, next) => {
